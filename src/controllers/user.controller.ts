@@ -54,3 +54,54 @@ export const getUserQuotes = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getUserById = async (req: Request, res: Response) => {
+  try {
+    const { uid } = req.params;
+
+    const id = parseInt(uid);
+
+    const userFound: User | null = await userService.getUserById(id);
+
+    if (!userFound) {
+      return res.status(409).json({
+        message: "The user has not been found.",
+      });
+    }
+
+    return res.json({
+      data: userFound,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal server error.",
+    });
+  }
+};
+
+export const deleteUserById = async (req: Request, res: Response) => {
+  try {
+    const { uid } = req.params;
+
+    const id = parseInt(uid);
+
+    const userFound: User | null = await userService.getUserById(id);
+
+    if (!userFound) {
+      return res.status(409).json({
+        message: "The user has not been found.",
+      });
+    }
+
+    const deletedUser: User = await userService.deleteUserById(id);
+
+    return res.json({
+      message: "The user has been deleted successfully.",
+      data: deletedUser,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal server error.",
+    });
+  }
+};
