@@ -4,7 +4,7 @@ import morgan from "morgan";
 import express, { Application } from "express";
 import * as routes from "./routes";
 
-class Server {
+export class Server {
   private app: Application;
   private port: string;
   private apiRoutes = {
@@ -37,5 +37,3 @@ class Server {
     });
   }
 }
-
-export default Server;

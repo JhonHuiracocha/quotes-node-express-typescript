@@ -1,1 +1,1 @@
-export * as bcryptHelper from "./bcrypt";
+export * as bcryptHelper from "./bcrypt.helper";

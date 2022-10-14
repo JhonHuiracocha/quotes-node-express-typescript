@@ -1,10 +1,18 @@
 import { Request, Response } from "express";
-import { quoteService } from "../services";
+import { quoteService, userService } from "../services";
 import { Prisma, Quote } from "@prisma/client";
 
 export const createQuote = async (req: Request, res: Response) => {
   try {
     const { quote, authorId } = req.body;
+
+    const userFound = await userService.getUserById(authorId);
+
+    if (!userFound) {
+      return res.status(404).json({
+        message: "The user has not been found.",
+      });
+    }
 
     const newQuote: Prisma.QuoteCreateInput = {
       quote,
