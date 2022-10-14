@@ -22,7 +22,6 @@ export const createQuote = async (req: Request, res: Response) => {
       data: createdQuote,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       message: "Internal server error.",
     });
@@ -45,7 +44,6 @@ export const getQuoteById = async (req: Request, res: Response) => {
 
     return res.json({ data: quoteFound });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       message: "Internal server error.",
     });
