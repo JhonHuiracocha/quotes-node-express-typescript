@@ -36,3 +36,35 @@ export const getUserQuotes = (
     skip,
   });
 };
+
+export const getUserById = (uid: number): Promise<User | null> => {
+  return prisma.user.findFirst({
+    where: {
+      id: uid,
+      status: true,
+    },
+  });
+};
+
+export const updateUserById = (
+  uid: number,
+  userUpdateInput: Prisma.UserUpdateInput
+): Promise<User> => {
+  return prisma.user.update({
+    where: {
+      id: uid,
+    },
+    data: userUpdateInput,
+  });
+};
+
+export const deleteUserById = (uid: number): Promise<User> => {
+  return prisma.user.update({
+    where: {
+      id: uid,
+    },
+    data: {
+      status: false,
+    },
+  });
+};
