@@ -1,0 +1,32 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @db.VarChar(45)
+  email     String   @unique @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  imageUrl  String?  @db.Text
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Quotes    Quote[]
+}
+
+model Quote {
+  id        Int      @id @default(autoincrement())
+  quote     String   @db.Text
+  status    Boolean  @default(true)
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

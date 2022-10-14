@@ -2,6 +2,7 @@ import "dotenv/config";
 import cors from "cors";
 import morgan from "morgan";
 import express, { Application } from "express";
+import * as routes from "./routes";
 
 class Server {
   private app: Application;
@@ -24,7 +25,9 @@ class Server {
     this.app.use(express.json());
   }
 
-  routes(): void {}
+  routes(): void {
+    this.app.use(this.apiRoutes.quotes, routes.quoteRoutes);
+  }
 
   listen(): void {
     this.app.listen(this.port, () => {
