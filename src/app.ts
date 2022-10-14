@@ -8,6 +8,7 @@ class Server {
   private app: Application;
   private port: string;
   private apiRoutes = {
+    users: "/api/users",
     quotes: "/api/quotes",
   };
 
@@ -26,6 +27,7 @@ class Server {
   }
 
   routes(): void {
+    this.app.use(this.apiRoutes.users, routes.userRoutes);
     this.app.use(this.apiRoutes.quotes, routes.quoteRoutes);
   }
 
