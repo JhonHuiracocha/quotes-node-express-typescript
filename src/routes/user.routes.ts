@@ -1,11 +1,31 @@
 import { Router } from "express";
 import { userController } from "../controllers";
+import { userValidator } from "../validators";
 
 const userRoutes = Router();
 
-userRoutes.post("/", userController.createUser);
-userRoutes.get("/:uid", userController.getUserById);
-userRoutes.get("/:uid/quotes", userController.getUserQuotes);
-userRoutes.delete("/:uid", userController.deleteUserById);
+userRoutes.post(
+  "/",
+  userValidator.validateCreateUserInput,
+  userController.createUser
+);
+
+userRoutes.get(
+  "/:uid",
+  userValidator.validateUserId,
+  userController.getUserById
+);
+
+userRoutes.get(
+  "/:uid/quotes",
+  userValidator.validateUserId,
+  userController.getUserQuotes
+);
+
+userRoutes.delete(
+  "/:uid",
+  userValidator.validateUserId,
+  userController.deleteUserById
+);
 
 export { userRoutes };
