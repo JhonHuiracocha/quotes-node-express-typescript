@@ -1,7 +1,7 @@
 import { check } from "express-validator";
 import { validateRequestSchema } from "../middlewares";
 
-export const validateQuoteInput = [
+export const validateCreateQuote = [
   check("quote").not().isEmpty().withMessage("The quote cannot be empty"),
   check("authorId")
     .not()
@@ -9,6 +9,11 @@ export const validateQuoteInput = [
     .withMessage("The quote must include the author id")
     .isNumeric()
     .withMessage("The author id must be a number"),
+  validateRequestSchema,
+];
+
+export const validateUpdateQuote = [
+  check("quote").not().isEmpty().withMessage("The quote cannot be empty"),
   validateRequestSchema,
 ];
 
