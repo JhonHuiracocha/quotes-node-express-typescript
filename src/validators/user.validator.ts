@@ -1,7 +1,7 @@
 import { check } from "express-validator";
 import { validateRequestSchema } from "../middlewares";
 
-export const validateCreateUserInput = [
+export const validateCreateUser = [
   check("username")
     .not()
     .isEmpty()

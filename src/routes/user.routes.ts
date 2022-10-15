@@ -6,7 +6,7 @@ const userRoutes = Router();
 
 userRoutes.post(
   "/",
-  userValidator.validateCreateUserInput,
+  userValidator.validateCreateUser,
   userController.createUser
 );
 

@@ -1,6 +1,7 @@
 import "dotenv/config";
 import cors from "cors";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 import express, { Application } from "express";
 import * as routes from "./routes";
 
@@ -25,6 +26,7 @@ export class Server {
     this.app.use(cors());
     this.app.use(morgan("dev"));
     this.app.use(express.json());
+    this.app.use(cookieParser());
   }
 
   routes(): void {
