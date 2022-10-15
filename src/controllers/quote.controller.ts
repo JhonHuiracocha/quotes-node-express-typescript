@@ -1,6 +1,6 @@
+import { Prisma, Quote, User } from "@prisma/client";
 import { Request, Response } from "express";
 import { quoteService, userService } from "../services";
-import { Prisma, Quote, User } from "@prisma/client";
 
 export const createQuote = async (req: Request, res: Response) => {
   try {
@@ -63,7 +63,7 @@ export const updateQuoteById = async (req: Request, res: Response) => {
     const { quoteId } = req.params;
     const { quote } = req.body;
 
-    const id = parseInt(quoteId);
+    const id: number = parseInt(quoteId);
 
     const newQuote: Prisma.QuoteUpdateInput = {
       quote,
@@ -97,7 +97,7 @@ export const deleteQuoteById = async (req: Request, res: Response) => {
   try {
     const { quoteId } = req.params;
 
-    const id = parseInt(quoteId);
+    const id: number = parseInt(quoteId);
 
     const quoteFound: Quote | null = await quoteService.getQuoteById(id);
 

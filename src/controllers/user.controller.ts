@@ -7,7 +7,9 @@ export const createUser = async (req: Request, res: Response) => {
   try {
     const { username, email, password, imageUrl } = req.body;
 
-    const encrytepPassword = await bcryptHelper.encryptPassword(password);
+    const encrytepPassword: string = await bcryptHelper.encryptPassword(
+      password
+    );
 
     const newUser: Prisma.UserCreateInput = {
       username,
@@ -41,7 +43,7 @@ export const getUserQuotes = async (req: Request, res: Response) => {
   try {
     const { uid } = req.params;
 
-    const id = parseInt(uid);
+    const id: number = parseInt(uid);
 
     const quotes: Quote[] = await userService.getUserQuotes(id);
 
@@ -59,7 +61,7 @@ export const getUserById = async (req: Request, res: Response) => {
   try {
     const { uid } = req.params;
 
-    const id = parseInt(uid);
+    const id: number = parseInt(uid);
 
     const userFound: User | null = await userService.getUserById(id);
 
@@ -83,7 +85,7 @@ export const deleteUserById = async (req: Request, res: Response) => {
   try {
     const { uid } = req.params;
 
-    const id = parseInt(uid);
+    const id: number = parseInt(uid);
 
     const userFound: User | null = await userService.getUserById(id);
 

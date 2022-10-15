@@ -20,7 +20,6 @@ export const validateCreateUserInput = [
     .withMessage("The password cannot be empty")
     .isLength({ max: 255 })
     .withMessage("The password must have a maximum of 255 characters"),
-  check("imageUrl").isString().withMessage("The image url must be a string"),
   validateRequestSchema,
 ];
 
