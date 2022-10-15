@@ -1,12 +1,14 @@
 import { Router } from "express";
 import { quoteController } from "../controllers";
+import { validateToken } from "../middlewares";
 import { quoteValidator } from "../validators";
 
 const quoteRoutes = Router();
 
 quoteRoutes.post(
   "/",
-  quoteValidator.validateQuoteInput,
+  validateToken,
+  quoteValidator.validateCreateQuote,
   quoteController.createQuote
 );
 
@@ -18,12 +20,14 @@ quoteRoutes.get(
 
 quoteRoutes.patch(
   "/:quoteId",
-  quoteValidator.validateQuoteInput,
+  validateToken,
+  quoteValidator.validateUpdateQuote,
   quoteController.updateQuoteById
 );
 
 quoteRoutes.delete(
   "/:quoteId",
+  validateToken,
   quoteValidator.validateQuoteId,
   quoteController.deleteQuoteById
 );
