@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
 import { Request, Response } from "express";
-import { bcryptHelper } from "../helpers";
+import { bcryptHelper, jwtHelper } from "../helpers";
 import { userService } from "../services";
 
 export const login = async (req: Request, res: Response) => {
@@ -26,9 +26,10 @@ export const login = async (req: Request, res: Response) => {
       });
     }
 
-    return res.json({
+    const accessToken: string = jwtHelper.generateToken(userFound.id);
+
+    return res.cookie("token", accessToken).json({
       message: "Successful login.",
-      accessToken: null,
     });
   } catch (error) {
     return res.status(500).json({
