@@ -28,8 +28,9 @@ export const login = async (req: Request, res: Response) => {
 
     const accessToken: string = jwtHelper.generateToken(userFound.id);
 
-    return res.cookie("token", accessToken).json({
+    return res.json({
       message: "Successful login.",
+      accessToken,
     });
   } catch (error) {
     return res.status(500).json({

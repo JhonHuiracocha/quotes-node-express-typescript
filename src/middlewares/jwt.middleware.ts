@@ -3,7 +3,9 @@ import jwt from "jsonwebtoken";
 
 export const validateToken = (req: any, res: Response, next: NextFunction) => {
   try {
-    const { token } = req.cookies;
+    const token: string | undefined = req
+      .header("Authorization")
+      ?.replace("Bearer ", "");
 
     if (!token) {
       return res.status(401).json({
@@ -11,7 +13,7 @@ export const validateToken = (req: any, res: Response, next: NextFunction) => {
       });
     }
 
-    const decoded: any = jwt.verify(token, process.env.PRIVATE_JWT_KEY || "");
+    const decoded: any = jwt.verify(token, process.env.SECRET_JWT_SEED || "");
 
     if (!decoded) {
       return res.status(401).json({
