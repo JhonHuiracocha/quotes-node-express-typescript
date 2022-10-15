@@ -8,6 +8,7 @@ export class Server {
   private app: Application;
   private port: string;
   private apiRoutes = {
+    auth: "/api/auth",
     users: "/api/users",
     quotes: "/api/quotes",
   };
@@ -27,6 +28,7 @@ export class Server {
   }
 
   routes(): void {
+    this.app.use(this.apiRoutes.auth, routes.authRoutes);
     this.app.use(this.apiRoutes.users, routes.userRoutes);
     this.app.use(this.apiRoutes.quotes, routes.quoteRoutes);
   }
