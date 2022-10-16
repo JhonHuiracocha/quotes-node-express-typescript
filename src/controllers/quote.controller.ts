@@ -1,16 +1,27 @@
 import { Prisma, Quote, User } from "@prisma/client";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import { HttpCode, HttpExecption } from "../exceptions";
 import { quoteService, userService } from "../services";
 
-export const createQuote = async (req: Request, res: Response) => {
+export const createQuote = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { quote, authorId } = req.body;
 
     const userFound: User | null = await userService.getUserById(authorId);
 
     if (!userFound) {
-      return res.status(404).json({
-        message: "The user has not been found.",
+      throw new HttpExecption({
+        statusCode: HttpCode.NOT_FOUND,
+        errors: [
+          {
+            param: "authorId",
+            msg: "The user has not been found.",
+          },
+        ],
       });
     }
 
@@ -25,18 +36,20 @@ export const createQuote = async (req: Request, res: Response) => {
 
     const createdQuote: Quote = await quoteService.createQuote(newQuote);
 
-    return res.status(201).json({
+    return res.status(HttpCode.CREATED).json({
       message: "The quote has been created successfully.",
       data: createdQuote,
     });
   } catch (error) {
-    return res.status(500).json({
-      message: "Internal server error.",
-    });
+    next(error);
   }
 };
 
-export const getQuoteById = async (req: Request, res: Response) => {
+export const getQuoteById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { quoteId } = req.params;
 
@@ -45,20 +58,28 @@ export const getQuoteById = async (req: Request, res: Response) => {
     );
 
     if (!quoteFound) {
-      return res.status(404).json({
-        message: "The quote has not been found.",
+      throw new HttpExecption({
+        statusCode: HttpCode.NOT_FOUND,
+        errors: [
+          {
+            param: "quoteId",
+            msg: "The quote has not been found.",
+          },
+        ],
       });
     }
 
-    return res.json({ data: quoteFound });
+    return res.status(HttpCode.OK).json({ data: quoteFound });
   } catch (error) {
-    return res.status(500).json({
-      message: "Internal server error.",
-    });
+    next(error);
   }
 };
 
-export const updateQuoteById = async (req: Request, res: Response) => {
+export const updateQuoteById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { quoteId } = req.params;
     const { quote } = req.body;
@@ -72,8 +93,14 @@ export const updateQuoteById = async (req: Request, res: Response) => {
     const quoteFound: Quote | null = await quoteService.getQuoteById(id);
 
     if (!quoteFound) {
-      return res.status(404).json({
-        message: "The quote has not been found.",
+      throw new HttpExecption({
+        statusCode: HttpCode.NOT_FOUND,
+        errors: [
+          {
+            param: "quoteId",
+            msg: "The quote has not been found.",
+          },
+        ],
       });
     }
 
@@ -82,18 +109,20 @@ export const updateQuoteById = async (req: Request, res: Response) => {
       newQuote
     );
 
-    return res.json({
+    return res.status(HttpCode.OK).json({
       message: "The quote has been updated successfully.",
       data: updatedQuote,
     });
   } catch (error) {
-    return res.status(500).json({
-      message: "Internal server error.",
-    });
+    next(error);
   }
 };
 
-export const deleteQuoteById = async (req: Request, res: Response) => {
+export const deleteQuoteById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { quoteId } = req.params;
 
@@ -102,20 +131,24 @@ export const deleteQuoteById = async (req: Request, res: Response) => {
     const quoteFound: Quote | null = await quoteService.getQuoteById(id);
 
     if (!quoteFound) {
-      return res.status(404).json({
-        message: "The quote has not been found.",
+      throw new HttpExecption({
+        statusCode: HttpCode.NOT_FOUND,
+        errors: [
+          {
+            param: "quoteId",
+            msg: "The quote has not been found.",
+          },
+        ],
       });
     }
 
     const deletedQuote = await quoteService.deleteQuoteById(id);
 
-    return res.json({
+    return res.status(HttpCode.OK).json({
       message: "The quote has been deleted successfully.",
       data: deletedQuote,
     });
   } catch (error) {
-    return res.status(500).json({
-      message: "Internal server error.",
-    });
+    next(error);
   }
 };

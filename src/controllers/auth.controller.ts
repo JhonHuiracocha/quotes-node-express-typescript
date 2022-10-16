@@ -1,17 +1,28 @@
 import { User } from "@prisma/client";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import { HttpCode, HttpExecption } from "../exceptions";
 import { bcryptHelper, jwtHelper } from "../helpers";
 import { userService } from "../services";
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { email, password } = req.body;
 
     const userFound: User | null = await userService.doesUserExist(email);
 
     if (!userFound) {
-      return res.status(401).json({
-        message: "The email or password is invalid.",
+      throw new HttpExecption({
+        statusCode: HttpCode.INTERNAL_SERVER_ERROR,
+        errors: [
+          {
+            param: "email or password",
+            msg: "The email or password is invalid.",
+          },
+        ],
       });
     }
 
@@ -21,20 +32,24 @@ export const login = async (req: Request, res: Response) => {
     );
 
     if (!comparePassword) {
-      return res.status(401).json({
-        message: "The email or password is invalid.",
+      throw new HttpExecption({
+        statusCode: HttpCode.UNAUTHORIZED,
+        errors: [
+          {
+            param: "email or password",
+            msg: "The email or password is invalid.",
+          },
+        ],
       });
     }
 
     const accessToken: string = jwtHelper.generateToken(userFound.id);
 
-    return res.json({
+    return res.status(HttpCode.OK).json({
       message: "Successful login.",
       accessToken,
     });
   } catch (error) {
-    return res.status(500).json({
-      message: "Internal server error.",
-    });
+    next(error);
   }
 };

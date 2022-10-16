@@ -1,5 +1,6 @@
-import { NextFunction, Response } from "express";
 import jwt from "jsonwebtoken";
+import { NextFunction, Response } from "express";
+import { HttpCode, HttpExecption } from "../exceptions";
 
 export const validateToken = (req: any, res: Response, next: NextFunction) => {
   try {
@@ -8,16 +9,28 @@ export const validateToken = (req: any, res: Response, next: NextFunction) => {
       ?.replace("Bearer ", "");
 
     if (!token) {
-      return res.status(401).json({
-        message: "No token provided.",
+      throw new HttpExecption({
+        statusCode: HttpCode.UNAUTHORIZED,
+        errors: [
+          {
+            param: "token",
+            msg: "No token provided.",
+          },
+        ],
       });
     }
 
     const decoded: any = jwt.verify(token, process.env.SECRET_JWT_SEED || "");
 
     if (!decoded) {
-      return res.status(401).json({
-        message: "Unauthorized!",
+      throw new HttpExecption({
+        statusCode: HttpCode.UNAUTHORIZED,
+        errors: [
+          {
+            param: "token",
+            msg: "Unauthorized!",
+          },
+        ],
       });
     }
 
@@ -25,8 +38,14 @@ export const validateToken = (req: any, res: Response, next: NextFunction) => {
 
     next();
   } catch (error) {
-    return res.status(401).json({
-      message: "Invalid token.",
+    throw new HttpExecption({
+      statusCode: HttpCode.UNAUTHORIZED,
+      errors: [
+        {
+          param: "token",
+          msg: "Invalid token.",
+        },
+      ],
     });
   }
 };
