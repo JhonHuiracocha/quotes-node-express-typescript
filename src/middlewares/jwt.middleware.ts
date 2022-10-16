@@ -1,6 +1,6 @@
-import jwt from "jsonwebtoken";
 import { NextFunction, Response } from "express";
 import { HttpCode, HttpExecption } from "../exceptions";
+import { jwtHelper } from "../helpers";
 
 export const validateToken = (req: any, res: Response, next: NextFunction) => {
   try {
@@ -20,7 +20,10 @@ export const validateToken = (req: any, res: Response, next: NextFunction) => {
       });
     }
 
-    const decoded: any = jwt.verify(token, process.env.SECRET_JWT_SEED || "");
+    const decoded = jwtHelper.verifyToken(
+      token,
+      process.env.SECRET_JWT_SEED || "secret"
+    );
 
     if (!decoded) {
       throw new HttpExecption({

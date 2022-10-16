@@ -47,6 +47,7 @@ export const login = async (
 
     return res.status(HttpCode.OK).json({
       message: "Successful login.",
+      uid: userFound.id,
       accessToken,
     });
   } catch (error) {

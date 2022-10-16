@@ -7,3 +7,7 @@ export const generateToken = (uid: number): string => {
     expiresIn: "24h",
   });
 };
+
+export const verifyToken = (token: string, secrect: string): any => {
+  return jwt.verify(token, secrect);
+};
