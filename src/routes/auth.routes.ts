@@ -10,4 +10,10 @@ authRoutes.post(
   authController.login
 );
 
+authRoutes.post(
+  "/register",
+  authValidator.validateUserRegister,
+  authController.register
+);
+
 export { authRoutes };
