@@ -12,8 +12,8 @@ export const validateUserLogin = [
     .not()
     .isEmpty()
     .withMessage("The password cannot be empty")
-    .isLength({ max: 255 })
-    .withMessage("The password must have a maximum of 255 characters"),
+    .isLength({ max: 20 })
+    .withMessage("The password must have a maximum of 20 characters"),
   validateRequestSchema,
 ];
 
@@ -34,7 +34,7 @@ export const validateUserRegister = [
     .not()
     .isEmpty()
     .withMessage("The password cannot be empty")
-    .isLength({ max: 255 })
-    .withMessage("The password must have a maximum of 255 characters"),
+    .isLength({ max: 20 })
+    .withMessage("The password must have a maximum of 20 characters"),
   validateRequestSchema,
 ];
