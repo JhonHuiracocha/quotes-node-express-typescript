@@ -2,7 +2,12 @@ import { check } from "express-validator";
 import { validateRequestSchema } from "../middlewares";
 
 export const validateCreateQuote = [
-  check("quote").not().isEmpty().withMessage("The quote cannot be empty"),
+  check("quote")
+    .not()
+    .isEmpty()
+    .withMessage("The quote cannot be empty")
+    .isLength({ max: 150 })
+    .withMessage("The quote must have a maximum of 150 characters"),
   check("authorId")
     .not()
     .isEmpty()
@@ -13,7 +18,12 @@ export const validateCreateQuote = [
 ];
 
 export const validateUpdateQuote = [
-  check("quote").not().isEmpty().withMessage("The quote cannot be empty"),
+  check("quote")
+    .not()
+    .isEmpty()
+    .withMessage("The quote cannot be empty")
+    .isLength({ max: 150 })
+    .withMessage("The quote must have a maximum of 150 characters"),
   validateRequestSchema,
 ];
 
